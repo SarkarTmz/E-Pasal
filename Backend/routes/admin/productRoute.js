@@ -5,7 +5,7 @@ const restrictTo = require("../../middleware/restrictTo")
 const router = require("express").Router()
 const {multer,storage  } = require("../../middleware/multerConfig")
 const catchAsync = require("../../services/catchAsync")
-const { getProducts, getProduct } = require("../../controller/globleController/globalController")
+const { getProducts, getProduct } = require("../../controller/global/globalController")
 const upload = multer({storage : storage})
 
 
