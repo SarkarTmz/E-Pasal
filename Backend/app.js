@@ -2,6 +2,7 @@ const express = require("express")
 const { connectDatabase } = require("./database/database")
 const app = express()
 
+const {Server} =  require("socket.io")
 
 
 //ROUTES HERE
@@ -14,6 +15,7 @@ const cartRoute = require("./routes/user/cartRoute")
 const orderRoute = require("./routes/user/orderRoute")
 const adminOrdersRoute = require("./routes/admin/adminOrderRoute")
 const paymentRoute = require("./routes/user/paymentRoute")
+const User = require("./model/userModel")
 
 //Routes end here
 
@@ -22,6 +24,7 @@ const paymentRoute = require("./routes/user/paymentRoute")
 // TELL NODE TO USE DOTENV
 require("dotenv").config()
 
+app.set('view engine','ejs')
 
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
@@ -32,6 +35,9 @@ app.use(express.static("./uploads"))
 //DATABASE CONNECTION
 connectDatabase(process.env.MONGO_URI)
 
+app.get("/chat",(req,res)=>{
+    res.render("home.ejs")
+})
  //test api to check if server is live or not
 app.get("/",(req,res)=>{
     res.status(200).json({
@@ -56,6 +62,29 @@ app.use("/api/payment",paymentRoute)
 
 const PORT = process.env.PORT
 //listen server 
-app.listen(PORT,()=>{
+const server = app.listen(3000,()=>{
     console.log(`Server has started at PORT ${PORT} ` )
 })
+const io = new Server(server)
+
+
+
+// io.on("connection",(socket)=>{
+//  socket.on("register",async (data)=>{
+//     const {username,phoneNumber,email,password} = data
+//     // await User.create({
+//     //     userName : username,
+//     //     userPhoneNumber : phoneNumber,
+//     //     userEmail : email,
+//     //     userPassword : password
+//     // })
+//     // io.emit('response',{message : "User REgistered"})
+//     io.to(socket.id).emit('response',{message : "user registered"})
+//  })
+
+// })
+function getSocketIo(){
+    return io 
+}
+
+module.exports.getSocketIo = getSocketIo
