@@ -1,26 +1,31 @@
 import axios from "axios"
 import { useEffect } from "react"
 import { useState } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { add } from "../../../store/cartSlice"
+import { fetchProducts } from "../../../store/productSlice"
 
   export default function Product() {
-    const [products,setProducts] = useState([])
+ 
     const dispatch = useDispatch()
-
-    const fetchProducts = async()=>{
-      const response = await axios.get("http://localhost:3000/api/products")
-      if(response.status == 200){
-        setProducts(response.data.data)
-      }
-    }
+    const {data : products,status} =  useSelector((state)=>state.product)
+    
+  
     useEffect(()=>{
-      fetchProducts()
+     dispatch(fetchProducts())
     },[])
     
     const addToCart = (product)=>{
        dispatch(add(product))
     }
+
+    if(status == "loading"){
+      return <h1>Loading....</h1>
+    }
+    if(status == "error"){
+      return <h1>Error ! Something went wrong</h1>
+    }
+    
 
     return (
 <div className="relative w-full">
@@ -43,8 +48,8 @@ import { add } from "../../../store/cartSlice"
                 <p className="mr-2 text-lg font-semibold text-gray-900 dark:text-white">Rs.{product.productPrice}</p>
                 <p className="text-base font-medium text-gray-500 line-through dark:text-gray-300">$25.00</p>
                 <button onClick={()=>addToCart(product)} className="px-4 py-2 mx-6 font-bold text-white bg-yellow-500 rounded hover:bg-yellow-600">
-                    Add to Cart
-                </button>
+      Add to Cart
+    </button>
               </div>
             </div>
           </div>
