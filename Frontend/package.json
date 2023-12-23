@@ -14,8 +14,11 @@
     "@heroicons/react": "^2.0.18",
     "@reduxjs/toolkit": "^2.0.1",
     "axios": "^1.6.2",
+    "install": "^0.13.0",
+    "npm": "^10.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.49.2",
     "react-redux": "^9.0.3",
     "react-router-dom": "^6.20.1"
   },
